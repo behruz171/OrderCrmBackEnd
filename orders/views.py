@@ -11,6 +11,14 @@ from .models import Order
 from .serializers import OrderSerializer
 
 
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def order_detail_public(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    serializer = OrderSerializer(order)
+    return Response(serializer.data)
+
+
 class OrderListCreateView(generics.ListCreateAPIView):
     serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated]
