@@ -2,3 +2,6 @@ db.sqlite3
 /venv
 venv
 media
+__pycache__/
+*.py[cod]
+*$py.class
