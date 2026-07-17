@@ -1,13 +1,11 @@
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from django.conf import settings
 import io
 import os
-import uuid
 
 from .models import Order
 from .serializers import OrderSerializer
@@ -333,23 +331,4 @@ def export_pdf(request, pk):
     return response
 
 
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
-def upload_order_image(request):
-    file = request.FILES.get('image')
-    if not file:
-        return Response({'error': 'No image file provided'}, status=status.HTTP_400_BAD_REQUEST)
 
-    ext = os.path.splitext(file.name)[1] or '.jpg'
-    filename = f"{uuid.uuid4().hex}{ext}"
-    upload_dir = os.path.join(settings.MEDIA_ROOT, 'order_items')
-    os.makedirs(upload_dir, exist_ok=True)
-    filepath = os.path.join(upload_dir, filename)
-
-    with open(filepath, 'wb+') as f:
-        for chunk in file.chunks():
-            f.write(chunk)
-
-    url = f"{settings.MEDIA_URL}order_items/{filename}"
-    absolute_url = request.build_absolute_uri(url)
-    return Response({'image_url': absolute_url})
