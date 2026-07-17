@@ -7,4 +7,5 @@ urlpatterns = [
     path('<int:pk>/export/excel/', views.export_excel, name='order-export-excel'),
     path('<int:pk>/export/pdf/', views.export_pdf, name='order-export-pdf'),
     path('<int:pk>/view/', views.order_detail_public, name='order-detail-public'),
+    path('upload-image/', views.upload_order_image, name='order-upload-image'),
 ]
